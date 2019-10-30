@@ -24,7 +24,7 @@ class ParamsSerializer(Serializer):
 
 class CoinParams(object):
     def __init__(self, data):
-        self.limit = data.get("limit", 5)
+        self.limit = data.get("limit", 2)
         self.offset = data.get("offset", 0)
         self.metal_type = data.get("metal_type")
         self.tags = data.get("tags")
@@ -65,6 +65,8 @@ class CoinsListView(APIView):
 
             queryset = queryset.filter(term_filter)
 
+        count = queryset.count()
+
         queryset = queryset.all()[params.offset:params.offset + params.limit]
 
         serializer = CoinsSerializer(queryset, many=True)
@@ -72,7 +74,8 @@ class CoinsListView(APIView):
         result_data = serializer.data
 
         result = {
-            "result": result_data
+            "result": result_data,
+            "count": count,
         }
 
         return Response(result)
