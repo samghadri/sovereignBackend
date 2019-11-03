@@ -4,7 +4,7 @@ from rest_framework import status
 
 from django.db.models import Q
 
-from .serializers import CoinsSerializer, CoinTagSerializer
+from .serializers import CoinsSerializer, CoinTagSerializer, ContactUsSerializer
 from .models import Coins, CoinTag
 
 from rest_framework.serializers import Serializer, ModelSerializer
@@ -61,7 +61,7 @@ class CoinsListView(APIView):
 
         if params.search_text:
 
-            term_filter = Q(name__icontains=params.search_text)
+            term_filter = Q(name__icontains=params.search_text) | Q(description__icontains=params.search_text)
 
             queryset = queryset.filter(term_filter)
 
@@ -92,3 +92,15 @@ class TagCoinView(APIView):
         }
 
         return Response(result)
+
+
+class ContactUsView(APIView):
+
+    def post(self, request):
+        serializer = ContactUsSerializer
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

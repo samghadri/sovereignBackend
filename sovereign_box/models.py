@@ -20,6 +20,14 @@ class Coins(models.Model):
 
     metal_type = models.CharField(choices=COIN_OPTIONS, max_length=1)
 
+    image = models.ImageField(
+        upload_to="image_file/%Y/",
+        blank=True, null=True, verbose_name="Image")
+
+    image_2 = models.ImageField(
+        upload_to="image_file/%Y/",
+        blank=True, null=True, verbose_name="Image")
+
     year_of_mintage = models.CharField(max_length=60, blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
@@ -36,3 +44,15 @@ class CoinTagLink(models.Model):
 
     coins = models.ForeignKey(Coins)
     coin_tag = models.ForeignKey(CoinTag)
+
+
+class ContactUs(models.Model):
+
+    full_name = models.CharField(max_length=100)
+
+    email_address = models.CharField(max_length=150)
+
+    description = models.TextField()
+
+    def __str__(self):
+        return self.full_name

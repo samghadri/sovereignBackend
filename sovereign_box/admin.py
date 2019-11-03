@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Coins, CoinTag, CoinTagLink
+from .models import Coins, CoinTag, CoinTagLink, ContactUs
 
 
 class CoinTagAdmin(admin.TabularInline):
@@ -14,3 +14,4 @@ class CoinsAdmin(admin.ModelAdmin):
 
 admin.site.register(Coins, CoinsAdmin)
 admin.site.register(CoinTag)
+admin.site.register(ContactUs)

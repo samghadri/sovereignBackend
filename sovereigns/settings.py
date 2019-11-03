@@ -83,6 +83,14 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
 )
 
+BACKEND_URL = 'http://localhost:8000'
+
+# Media file uploading settings
+MEDIA_FILE_UPLOAD_MAX_SIZE = 128 * 1024 * 1024
+IMAGE_FILE_UPLOAD_EXTENSIONS = [
+    'jpg', 'jpeg', 'bmp',
+    'png', 'gif'
+]
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -132,3 +140,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Media files (uploads etc)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
