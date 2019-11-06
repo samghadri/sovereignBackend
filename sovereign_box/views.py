@@ -1,14 +1,17 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from django.db.models import Q
 
-from .serializers import CoinsSerializer, CoinTagSerializer, ContactUsSerializer
+from .serializers import CoinsSerializer, CoinTagSerializer, ContactUsSerializer, UserSerializer, AuthTokenserializer
 from .models import Coins, CoinTag
 
-from rest_framework.serializers import Serializer, ModelSerializer
-from rest_framework.fields import CharField, BooleanField, IntegerField, SerializerMethodField
+from rest_framework.serializers import Serializer
+from rest_framework.fields import CharField, IntegerField
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 
 class ParamsSerializer(Serializer):
@@ -40,7 +43,7 @@ class CoinParams(object):
 
 
 class CoinsListView(APIView):
-
+    # permission_classes = [IsAuthenticated]
     def get(self, request):
 
         param_serializer = ParamsSerializer(data=request.query_params)
@@ -104,3 +107,17 @@ class ContactUsView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreateUserView(APIView):
+    def post(self, request, format=None):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreateTokenView(ObtainAuthToken):
+    serializes_classs = AuthTokenserializer
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES

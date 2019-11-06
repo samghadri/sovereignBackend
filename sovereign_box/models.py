@@ -16,6 +16,11 @@ class Coins(models.Model):
         ('C', 'Copper')
     )
 
+    CERTIFICATION_TYPE = (
+        ('P', "PCGS"),
+        ('N', "NGC"),
+    )
+
     name = models.CharField(max_length=100)
 
     metal_type = models.CharField(choices=COIN_OPTIONS, max_length=1)
@@ -31,6 +36,10 @@ class Coins(models.Model):
     year_of_mintage = models.CharField(max_length=60, blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
+
+    grading_company = models.CharField(choices=CERTIFICATION_TYPE, max_length=1, blank=True, null=True)
+
+    certification_code = models.CharField(max_length=30, blank=True, null=True)
 
     tags = models.ManyToManyField(
         CoinTag, through="CoinTagLink", blank=True)
