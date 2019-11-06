@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Coins, CoinTag, ContactUs
+from .models import Coins, CoinTag, ContactUs, CoinOffer
 
 from django.conf import settings
 
@@ -22,20 +22,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AuthTokenserializer(serializers.Serializer):
 
-    email = serializers.CharField()
+    username = serializers.CharField()
 
     password = serializers.CharField(style={'input_type': 'password'}, trim_whitespace=False)
 
     def validate(self, attrs):
 
         """ validate and authenticate user """
-        email = attrs.get('email')
+        username = attrs.get('username')
 
         password = attrs.get('password')
 
         user = authenticate(
             request=self.context.get('request'),
-            username=email,
+            username=username,
             password=password
         )
 
@@ -80,4 +80,17 @@ class ContactUsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContactUs
+        fields = '__all__'
+
+
+class CoinOfferSerializer(serializers.ModelSerializer):
+
+    person = serializers.CharField(required=True)
+
+    offer = serializers.CharField(required=True)
+
+    coin = serializers.CharField(required=True)
+
+    class Meta:
+        model = CoinOffer
         fields = '__all__'

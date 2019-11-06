@@ -65,3 +65,15 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+class CoinOffer(models.Model):
+
+    person = models.CharField(max_length=60)
+
+    offer = models.CharField(max_length=60)
+
+    coin = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.person
