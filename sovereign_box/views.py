@@ -12,6 +12,7 @@ from rest_framework.serializers import Serializer
 from rest_framework.fields import CharField, IntegerField
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from .permissions import RequiresAuthenticationMixin
 
 
 class ParamsSerializer(Serializer):
@@ -42,10 +43,11 @@ class CoinParams(object):
         return []
 
 
-class CoinsListView(APIView):
-    # permission_classes = [IsAuthenticated]
+class CoinsListView(RequiresAuthenticationMixin, APIView):
     def get(self, request):
-
+        # permission_classes = [IsAuthenticated]
+        # above we are not using this as we are
+        # working with requires authenticationMixin
         param_serializer = ParamsSerializer(data=request.query_params)
 
         if not param_serializer.is_valid():
@@ -80,6 +82,7 @@ class CoinsListView(APIView):
             "result": result_data,
             "count": count,
         }
+        print("this is request", request)
 
         return Response(result)
 
@@ -100,8 +103,7 @@ class TagCoinView(APIView):
 class ContactUsView(APIView):
 
     def post(self, request):
-        serializer = ContactUsSerializer
-
+        serializer = ContactUsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

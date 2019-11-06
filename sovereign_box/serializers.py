@@ -74,7 +74,7 @@ class ContactUsSerializer(serializers.ModelSerializer):
 
     full_name = serializers.CharField(required=True)
 
-    email = serializers.CharField(required=True)
+    email_address = serializers.CharField(required=True)
 
     description = serializers.CharField(required=True)
 
