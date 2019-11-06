@@ -1,4 +1,6 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
+
 
 
 class CoinTag(models.Model):
@@ -25,13 +27,9 @@ class Coins(models.Model):
 
     metal_type = models.CharField(choices=COIN_OPTIONS, max_length=1)
 
-    image = models.ImageField(
-        upload_to="image_file/%Y/",
-        blank=True, null=True, verbose_name="Image")
+    image = CloudinaryField(blank=True, null=True)
 
-    image_2 = models.ImageField(
-        upload_to="image_file/%Y/",
-        blank=True, null=True, verbose_name="Image")
+    image_2 = CloudinaryField(blank=True, null=True)
 
     year_of_mintage = models.CharField(max_length=60, blank=True, null=True)
 

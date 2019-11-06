@@ -82,7 +82,6 @@ class CoinsListView(RequiresAuthenticationMixin, APIView):
             "result": result_data,
             "count": count,
         }
-        print("this is request", request)
 
         return Response(result)
 

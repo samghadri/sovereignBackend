@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import Coins, CoinTag, ContactUs, CoinOffer
 
 from django.conf import settings
+import cloudinary
 
 from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import ugettext_lazy as _
@@ -10,11 +11,32 @@ from django.utils.translation import ugettext_lazy as _
 User = get_user_model()
 
 
+def cloudinary_image_url(image, **kwargs):
+    """
+    Convenience function that returns a URL for an image from Cloudinary CDN
+    with appropriate attributes.
+
+    Allowed attributes:
+    width
+    height
+    crop
+    gravity
+    radius
+    effect
+    """
+
+    if image:
+        kwargs["secure"] = True
+        return cloudinary.CloudinaryImage(public_id=image.public_id, url_options=kwargs).url
+
+    return None
+
+
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('name', 'password', 'email')
+        fields = ('username', 'password', 'email')
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -60,10 +82,15 @@ class CoinsSerializer(serializers.ModelSerializer):
 
     image_url = serializers.SerializerMethodField()
 
+    image_url_2 = serializers.SerializerMethodField()
+
     def get_image_url(self, obj):
         if obj.image:
-            full_url = settings.BACKEND_URL + obj.image.url
-            return full_url
+            return cloudinary_image_url(obj.image)
+
+    def get_image_url_2(self, obj):
+        if obj.image_2:
+            return cloudinary_image_url(obj.image_2)
 
     class Meta:
         model = Coins

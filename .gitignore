@@ -1,0 +1,17 @@
+cloudinary_config.py
+
+*.pyc
+*.suo
+*.log
+logs/
+__pycache__/
+obj/
+.vs/
+*.user
+.vscode
+env/
+venv/
+/static/
+media/
+.idea
+node_modules/
